@@ -6,21 +6,27 @@ import java.util.stream.*;
 
 public class Main {
 
-    public static ArrayList<Integer> calculateChange(List<Integer> moneyInMachine, List<Integer> moneyInput, int productValue){
+    public static List<Integer> calculateChange(List<Integer> moneyInMachine, List<Integer> moneyInput, int productValue){
 
-        // add money input to moneyMachine
         moneyInMachine.addAll(moneyInput);
-
         Collections.sort(moneyInMachine);
 
-        int changeValueToReturn = moneyInput.stream().mapToInt(Integer::intValue).sum() - productValue;
-        ArrayList<Integer> changeArray = new ArrayList<>();
+        final int changeValueToReturn = moneyInput.stream().mapToInt(Integer::intValue).sum() - productValue;
+        int remainingChangeValueToReturn = changeValueToReturn;
+
+        if(changeValueToReturn < 0){
+            System.out.println("Produkt nie moze zostac sprzedany - zbyt mało gotówki");
+            moneyInMachine.removeAll(moneyInput);
+            return moneyInput;
+        }
+
+        List<Integer> changeArray = new ArrayList<>();
 
         for(int i = moneyInMachine.size() - 1; i >= 0; i--){
-            if(moneyInMachine.get(i) <= changeValueToReturn){
+            if(moneyInMachine.get(i) <= remainingChangeValueToReturn){
                 changeArray.add(moneyInMachine.get(i));
 
-                changeValueToReturn -= moneyInMachine.get(i);
+                remainingChangeValueToReturn -= moneyInMachine.get(i);
                 System.out.println("dodana moneta do wydania: " + moneyInMachine.get(i));
                 moneyInMachine.remove(new Integer(moneyInMachine.get(i)));
             }
@@ -28,6 +34,29 @@ public class Main {
 
         if(moneyInMachine.stream().mapToInt(Integer::intValue).sum()< 73){
             System.out.println("Produkt nie moze zostac sprzedany");
+            moneyInMachine.removeAll(moneyInput);
+            return moneyInput;
+        }
+
+        // jezeli nie mozna zwrocic pelnej reszty, obniz cene
+
+        if(remainingChangeValueToReturn > 0){
+            int firstGreaterValueCoin = moneyInMachine.stream()
+                    .peek(num -> System.out.println("will filter " + num))
+                    .filter(x -> x > changeValueToReturn)
+                    .findFirst()
+                    .get();
+            moneyInMachine.addAll(changeArray);
+            changeArray.clear();
+
+            moneyInMachine.remove(new Integer(firstGreaterValueCoin));
+            changeArray.add(firstGreaterValueCoin);
+        }
+
+        if(moneyInMachine.stream().mapToInt(Integer::intValue).sum()< 73){
+            System.out.println("Produkt nie moze zostac sprzedany");
+            moneyInMachine.removeAll(moneyInput);
+            return moneyInput;
         }
 
         return changeArray;
@@ -36,15 +65,8 @@ public class Main {
     public static void main(String[] args){
         List<Integer> moneyInMachine = new ArrayList<>();
         moneyInMachine.add(1);
-        moneyInMachine.add(1);
-        moneyInMachine.add(1);
-        moneyInMachine.add(2);
-        moneyInMachine.add(2);
-        moneyInMachine.add(2);
-        moneyInMachine.add(2);
-        moneyInMachine.add(5);
-        moneyInMachine.add(5);
-        moneyInMachine.add(5);
+
+        moneyInMachine.add(50);
 
 
         List<Integer> moneyInput = new ArrayList<>();
