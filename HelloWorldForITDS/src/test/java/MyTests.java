@@ -117,4 +117,26 @@ public class MyTests {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void shouldReturnInputMoneyWhenLessThan73Left() {
+
+        List<Integer> moneyInMachine = new ArrayList<>();
+        moneyInMachine.add(10);
+
+        List<Integer> moneyInput = new ArrayList<>();
+        moneyInput.add(20);
+        moneyInput.add(20);
+        moneyInput.add(20);
+
+
+        List<Integer> actual = Main.calculateChange(moneyInMachine, moneyInput, 50);
+
+        List<Integer> expected= new ArrayList<>();
+        expected.add(20);
+        expected.add(20);
+        expected.add(20);
+
+        assertEquals(expected, actual);
+    }
 }

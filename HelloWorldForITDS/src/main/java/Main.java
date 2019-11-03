@@ -13,7 +13,7 @@ public class Main {
         int remainingChangeValueToReturn = changeValueToReturn;
 
         if(changeValueToReturn < 0){
-            System.out.println("Produkt nie moze zostac sprzedany - zbyt mało gotówki");
+            System.out.println("Produkt nie moze zostac sprzedany - zbyt malo gotowki");
             moneyInMachine.removeAll(moneyInput);
             return moneyInput;
         }
@@ -35,8 +35,6 @@ public class Main {
             return moneyInput;
         }
 
-        // jezeli nie mozna zwrocic pelnej reszty, obniz cene
-
         if(remainingChangeValueToReturn > 0){
             int firstGreaterValueCoin = moneyInMachine.stream()
                     .filter(x -> x > changeValueToReturn)
@@ -50,7 +48,7 @@ public class Main {
         }
 
         if(moneyInMachine.stream().mapToInt(Integer::intValue).sum()< 73){
-            System.out.println("Produkt nie moze zostac sprzedany");
+            System.out.println("Produkt nie moze zostac sprzedany - brak zapasu reszty w maszynie");
             moneyInMachine.removeAll(moneyInput);
             return moneyInput;
         }
@@ -61,14 +59,27 @@ public class Main {
     public static void main(String[] args){
         List<Integer> moneyInMachine = new ArrayList<>();
         moneyInMachine.add(1);
-        moneyInMachine.add(50);
+        moneyInMachine.add(1);
+        moneyInMachine.add(1);
+        moneyInMachine.add(1);
+        moneyInMachine.add(1);
+        moneyInMachine.add(2);
+        moneyInMachine.add(2);
+        moneyInMachine.add(2);
+        moneyInMachine.add(2);
+        moneyInMachine.add(2);
+        moneyInMachine.add(2);
+        moneyInMachine.add(5);
+        moneyInMachine.add(5);
+        moneyInMachine.add(5);
+        moneyInMachine.add(5);
 
         List<Integer> moneyInput = new ArrayList<>();
+
         moneyInput.add(200);
         moneyInput.add(50);
         moneyInput.add(20);
 
-        calculateChange(moneyInMachine, moneyInput, 254);
-
+        System.out.println(calculateChange(moneyInMachine, moneyInput, 254));
     }
 }
